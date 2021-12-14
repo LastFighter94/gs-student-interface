@@ -4,14 +4,22 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <!-- <link rel="icon" href="<%= BASE_URL %>favicon.ico"> -->
+    <!-- Почему-то не видит иконку - если открыть index.html отдельным файлом, при этом остальные страницы все видят даже если я удалю строчку "7"-->
+    <link rel="stylesheet" href="style.css">
+    <title>Frontend</title>
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>We're sorry but page doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
+ 
     <!-- built files will be auto injected -->
+
+    <button id="clear">click</button>
+    <p id="out"></p>
+
+    <script src="test.js"></script> 
+
   </body>
 </html>
