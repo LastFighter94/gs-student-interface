@@ -39,6 +39,18 @@
          "question_type": 2,
          "options": [],
          "selectedOption": []
-      }
+      },
+       {
+          "question_id": "5",
+          "question_text": "Rich folks in the world?",
+          "question_type": 3,
+          "options": [
+             "r1",
+             "r2",
+             "r3",
+             "r4"
+          ],
+          "selectedOption": []
+       }
      ]
  }

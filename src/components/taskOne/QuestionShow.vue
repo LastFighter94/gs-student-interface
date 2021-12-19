@@ -1,5 +1,4 @@
 <template>
-
     <div class="questionBox">
 
 <!-- Между первым <b></b> вставляется нумерация вопросов без привязки к div -->
@@ -19,32 +18,24 @@
 <p v-if="question.selectedOption.length !== 0">Ваш ответ: {{ question.selectedOption }}</p>
 
 </div>
-
 </template>
 
 <script>
 
 export default{
-
   props: {
     id: {
       type: String,
       required: true
     }
   },
-
   computed: {
     question(){
       return this.$store.state.questions.find(question => question.question_id === this.id)
     }
   },
 }
-
 </script>
-
-<style scoped>
-
-</style>
 
 
 

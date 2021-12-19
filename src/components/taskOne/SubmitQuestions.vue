@@ -1,38 +1,48 @@
 <template>
-
-  <div class="page">
-    <p><button @click="submit" class="btnTaskOne">Click to submit</button></p>
-      <router-link :to="{name: 'Home'}">Вернуться на главную</router-link>
-  </div>
-  
+    <button @click="submit" class="btnTaskOne">Отправить ответы</button>
+    <!--  -->
+    <div id="submitStateDiv"><p style="display:none" id="submitState">default submit state</p></div>
+    <!--  -->
 </template>
 
 <script>
-
 export default {
 
 emits: ["totalend"],
-
 data(){
     return{
         colorUndoneSecond: "#E3242B",
+        something: false
     }
   },
-
 computed: {
     questions(){
       return this.$store.state.questions
     }
   },
-
 methods: {
-
-submit(){
+  notConfident(){
+    let submitState= document.querySelector('#submitState');
+    submitState.innerHTML = "default submit state";
+    // submitState.style.display = "none";
+    // Для отображения состояния и возможной анимации
+  },
+  submit(){
+      // Функционал уверенного submit
+      let submitState = document.querySelector('#submitState');
+      if (submitState.textContent !== "default submit state"){
+            this.$emit('totalend')
+      }
+      submitState.innerHTML = "I AM CONFIDENT HERE MFUCKA!!!";
+      // submitState.style.display = "block";
+      // Для отображения состояния и возможной анимации
+      setTimeout(()=>this.notConfident(),5000)
+      // конец функционала уверенного submit
 
       let answers = 0;
       let q = this.questions.filter(q => q);
       let notAllAnswers = document.querySelector('#notAllAnswers');
-     
+      
         for (let i=0; i < q.length; i++){
 
           if(q[i].selectedOption.length !== 0){answers++} // 
@@ -47,22 +57,13 @@ submit(){
           //
 
           notAllAnswers.style.display = "block";
-          
           } 
         }
-
           // ЕСЛИ ВСЕ ВАРИАНТЫ ОТВЕТА ВЫБРАНЫ!
           if (answers===q.length){
             this.$emit('totalend')
           }
-
     },
-
   }
-
 }
 </script>
-
-<style scoped>
-
-</style>

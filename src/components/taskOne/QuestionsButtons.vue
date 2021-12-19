@@ -1,10 +1,6 @@
 <template>
-
   <div id="tasks">
-
-        <!-- функция вывода - в submitQuestions -->
-        <span id="notAllAnswers">Вы ответили не на все вопросы!</span>
-
+    
   <button class="knopka" 
   :style="question.selectedOption.length !== 0 ? {backgroundColor: colorDone} : {backgroundColor: colorUndoneFirst}" 
   v-for="question in questions" 
@@ -13,14 +9,22 @@
   :id="question.question_id + 'btn'">
   
   </button>
+  
+  <p><SubmitQuestions @totalend="this.$emit('totalend')"/></p>
+
+  <div id="warnNAA"><span id="notAllAnswers">Вы ответили не на все вопросы!</span></div>
 
   </div>
-  
 </template>
 
 <script>
+import SubmitQuestions from '@/components/taskOne/SubmitQuestions'
 
 export default {
+  emits: ["totalend"],
+  components: {
+    SubmitQuestions
+  },
 // Возможно это не лучшее решение, но оно работает
   data(){
     return{
@@ -35,7 +39,6 @@ export default {
     }
   },
   methods: {
-
 // getBoundingClientRect(); - стандартная функция в JS - поддерживается всеми основными браузерами
 
 // механизм работы описан в двух последующих строчках ниже:
@@ -72,7 +75,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -7,17 +7,14 @@
       </div>
     </div>
   </div>
-  
 </template>
 
 <script>
 
 export default {
-
   methods: {
     closeWindow(){
         let modal = document.getElementById("my_modal");
-
         modal.style.display = "none";
             // На случай отключения прокрутки (добавляем эти опции в showWarn() TimerFromStart, end() TaskOneBody)
             // Единственный возможный косяк в этом случае - после отправки всех вариантов ответа, модальное окно будет
@@ -26,10 +23,5 @@ export default {
             // document.body.style.overflow = 'visible'; - доступ к прокрутке
     }
   }
-
 }
 </script>
-
-<style scoped>
-
-</style>

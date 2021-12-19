@@ -1,86 +1,69 @@
 <template>
-
-<QuestionsButtons/>
-
+<QuestionsButtons @totalend="end()"/>
   <div :id="question.question_id" v-for="question in questions" :key="question.question_id">
 <QuestionShow :id="question.question_id"/>
   </div>
-
-<SubmitQuestions @totalend="end()"/>
-
-<TimerFromStart @totalend="end()"/>
-
+<TimerFromStart :disabled="isOver" @totalend="end()"/>
 </template>
 
 <script>
-
 import QuestionShow from '@/components/taskOne/QuestionShow'
-import SubmitQuestions from '@/components/taskOne/SubmitQuestions'
 import QuestionsButtons from '@/components/taskOne/QuestionsButtons'
 import TimerFromStart from '@/components/taskOne/TimerFromStart'
+// 
+import shuffle from '@/mixins/TaskOneBody/shuffle.js'
+import btnQuestionNums from '@/mixins/TaskOneBody/btnQuestionNums.js'
 
 export default{
-
+  mixins: [shuffle, btnQuestionNums],
+  data(){
+    return {
+      isOver: []
+    }
+  },
   components: {
     QuestionShow,
-    SubmitQuestions,
     QuestionsButtons,
-    TimerFromStart,
+    TimerFromStart
   },
-
   computed: {
     questions(){
       return this.shuffle(this.$store.state.questions)
       // возможно антипаттерн! 
-    },
-
+      // берем функционал из mixins
+    }
   },
-
   methods: {
+    end(){ 
+      this.isOver.push('yes it is');
 
-    shuffle(array){
-        let currentIndex = array.length;  
-        let randomIndex;
-
-          // While there remain elements to shuffle...
-          while (currentIndex != 0) {
-
-            // Pick a remaining element...
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]];
-  }
-
-  return array;
-
-    },
-
-    end(){
+      // let tasks = document.querySelector('#tasks');
+      // tasks.style.display = "none"
 
       // Закрытие отображения модального окна - если не закрыл пользователь (по истечению таймера - в данном случае)
       let modalAll = document.getElementById("modalAll");
       modalAll.style.display = "none";
-
+      
+  // NAV-BAR - оставлен
       // Убираем предупреждение (если оно есть) "Вы ответили не на все вопросы"
-      let notAllAnswers = document.querySelector('#notAllAnswers'); // Есть в submit() эта переменная
-      notAllAnswers.style.display = "none";
+      let warnNAA = document.querySelector('#warnNAA'); // warn Not All Answers
+      warnNAA.style.display = "none";
+
+      // Убираем отображение "уверенного submit" если он есть
+      // let submitStateDiv = document.querySelector('#submitStateDiv');
+      // submitStateDiv.style.display = "none";
+  //
 
       // Убираем время из локального хранилища
       localStorage.removeItem("initialTime");
+      localStorage.removeItem("over");
 
       // Отправка данных (нужные данные в разделе Proxy - [Target])
-
-      // 
       let q = this.questions.filter(q => q);
-      // let q = this.randomQ.filter(q => q);
-      // 
-
       console.log('ДАННЫЕ ОТПРАВЛЕНЫ!')
       console.log(q);
 
+    // NAV-BAR - оставлен
           // Окраска кнопочек с невыполненными вопросами
           // Именно по окончанию - такой функционал реализован в SubmitQuestions
           for (let i=0; i < q.length; i++){
@@ -91,32 +74,8 @@ export default{
               // colorUndoneSecond из SubmitQuestions
             } 
           }
+      //
     },
-    
-  },
-
-  mounted(){
-
-// Не знаю почему, но без mounted - реализовать данную схему не получилось
-// Здесь мы делаем нумерацию кнопок и вопросов без привязки к question_id
-    let q = this.questions.filter(q => q);
-    for (let i=0; i < q.length; i++){
-      let btnId = q[i].question_id + 'btn';
-      let btn = document.getElementById(btnId);
-      btn.innerHTML = i+1
-    }
-
-    for (let i=0; i < q.length; i++){
-      let qId = q[i].question_id;
-      let qShowDiv = document.getElementById(qId);
-      qShowDiv.children[0].children[0].innerHTML = i+1
-    }
-
-  },
+  }
 }
-
 </script>
-
-<style scoped>
-
-</style>
