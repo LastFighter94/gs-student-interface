@@ -1,8 +1,10 @@
 <template>
+<!-- Parent component - TaskOneBody -->
+
   <div id="tasks">
     
   <button class="knopka" 
-  :style="question.selectedOption.length !== 0 ? {backgroundColor: colorDone} : {backgroundColor: colorUndoneFirst}" 
+  :style="question.selectedOption.length !== 0 ? {backgroundColor: this.$store.state.colorDone} : {backgroundColor: this.$store.state.colorUndoneFirst}" 
   v-for="question in questions" 
   :key="question.question_id" 
   @click="goTo(question.question_id)" 
@@ -13,7 +15,7 @@
   <p><SubmitQuestions @totalend="this.$emit('totalend')"/></p>
 
   <div id="warnNAA"><span id="notAllAnswers">Вы ответили не на все вопросы!</span></div>
-
+  <!-- NAA - not all answers -->
   </div>
 </template>
 
@@ -24,13 +26,6 @@ export default {
   emits: ["totalend"],
   components: {
     SubmitQuestions
-  },
-// Возможно это не лучшее решение, но оно работает
-  data(){
-    return{
-        colorUndoneFirst: "#9A9A9A",
-        colorDone: "#00FF80"
-    }
   },
 // Используем Vuex дабы не засорять TaskOneBody очередным props
   computed: {
@@ -53,19 +48,21 @@ export default {
 
     goTo(boxId){ 
       
-      let box = document.getElementById(boxId); 
+      let box = document.getElementById(boxId); // динамический div QuestionShow
 
-      let boxTasks = document.getElementById("tasks"); 
-      const posTwo = boxTasks.getBoundingClientRect(); 
+      let boxTasks = document.getElementById("tasks"); // див с кнопочками вопросов от 1 до n
+      const posTwo = boxTasks.getBoundingClientRect(); // теперь можно искать offset boxTasks через posTwo
 
       function getOffset(el) {
         const pos = el.getBoundingClientRect();
         return {
           top: pos.top + window.scrollY - (posTwo.bottom - posTwo.top) - 10
+          // путем небольшой заморочки и Google - вычислили следующий top
+          // вдаваться в подробности поздно - разобраться можно и не сложно (по мере необходимости)
         };
       } 
 
-      let top = getOffset(box).top;
+      let top = getOffset(box).top; // наше вычисляемое динамическое значение к которому будет идти скролл
 
       window.scrollTo({
         top: top,

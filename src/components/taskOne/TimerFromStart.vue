@@ -37,7 +37,6 @@ export default {
             executionTime = parseInt(initialTime, 10) + this.$store.state.timeout - (new Date()).getTime();
             if (executionTime < 0) {
             executionTime = 0;
-            // this.$emit('totalend')
             }
       } 
 
@@ -68,12 +67,14 @@ export default {
           setTimeout(()=>this.showWarn('Осталось пять секунд'), this.stop-5000) // 15 секунд прошло (5 осталось)
     },
     sendToBackEnd(){
-          this.endTimeout = setTimeout(()=>this.$emit('totalend'), this.stop) // конец 
+          this.endTimeout = setTimeout(()=>this.$emit('totalend'), this.stop) // конец (по окончании заданного timeout)
     },
     clearSendToBackEnd(){
       clearTimeout(this.endTimeout)
+      // этот метод отрабатывает при преждевременном submit (confident submit || all answers before timeout)
     }
     },
+    // Здесь мы ловим изменения doneAllready (привязываем props disabled из родительского компонента = даем ему тип массив, потом, логически, при функции end() наполняем массив isOver строчкой string = yes it is; не получается отловить props напрямую, поэтому выводим его в дату и через watch отлавливаем изменение - чтобы сразу очистить таймаут)
     watch: {
       doneAllready: {
         handler(){

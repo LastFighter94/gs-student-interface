@@ -1,4 +1,5 @@
 <template>
+
 <QuestionsButtons @totalend="end()"/>
   <div :id="question.question_id" v-for="question in questions" :key="question.question_id">
 <QuestionShow :id="question.question_id"/>
@@ -10,7 +11,8 @@
 import QuestionShow from '@/components/taskOne/QuestionShow'
 import QuestionsButtons from '@/components/taskOne/QuestionsButtons'
 import TimerFromStart from '@/components/taskOne/TimerFromStart'
-// 
+
+// mixins
 import shuffle from '@/mixins/TaskOneBody/shuffle.js'
 import btnQuestionNums from '@/mixins/TaskOneBody/btnQuestionNums.js'
 
@@ -29,7 +31,7 @@ export default{
   computed: {
     questions(){
       return this.shuffle(this.$store.state.questions)
-      // возможно антипаттерн! 
+      // возможно антипаттерн! касательно shuffle, который берется из mixins
       // берем функционал из mixins
     }
   },
@@ -39,6 +41,7 @@ export default{
 
       // let tasks = document.querySelector('#tasks');
       // tasks.style.display = "none"
+      // рассмоментировав строчки выше - можно скрыть панельку NAV-BAR с вопросами после окончания теста
 
       // Закрытие отображения модального окна - если не закрыл пользователь (по истечению таймера - в данном случае)
       let modalAll = document.getElementById("modalAll");
@@ -50,6 +53,7 @@ export default{
       warnNAA.style.display = "none";
 
       // Убираем отображение "уверенного submit" если он есть
+      // Оставляю возможность отображения в примечаниях для возможной анимации
       // let submitStateDiv = document.querySelector('#submitStateDiv');
       // submitStateDiv.style.display = "none";
   //
@@ -58,10 +62,12 @@ export default{
       localStorage.removeItem("initialTime");
       localStorage.removeItem("over");
 
-      // Отправка данных (нужные данные в разделе Proxy - [Target])
+      // Отправка данных (нужные данные в разделе Proxy - [Target] - смотреть в консоле command + option + j)
       let q = this.questions.filter(q => q);
       console.log('ДАННЫЕ ОТПРАВЛЕНЫ!')
       console.log(q);
+      // так тоже работает, но код наверху дает более чистый вывод + был бы невозможен функционал окраски кнопочек с невыполненными вопросами, который прописан ниже
+      // console.log(this.questions)
 
     // NAV-BAR - оставлен
           // Окраска кнопочек с невыполненными вопросами
@@ -70,8 +76,7 @@ export default{
             if (q[i].selectedOption.length === 0) {
               let btnId = q[i].question_id + 'btn';
               let btnUndone = document.getElementById(btnId);
-              btnUndone.style.backgroundColor = "#E3242B";
-              // colorUndoneSecond из SubmitQuestions
+              btnUndone.style.backgroundColor = this.$store.state.colorUndoneSecond;
             } 
           }
       //
